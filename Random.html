@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bogdoing.Random</title>
+
+    <style>
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border: 1px solid #dddddd;
+            border-collapse: collapse; 
+        }
+        table th {
+            font-weight: bold;
+            padding: 5px;
+            background: #efefef;
+            border: 1px solid #dddddd;
+        }
+        table td {
+            border: 1px solid #dddddd;
+            padding: 5px;
+        }
+    </style>
+
+    <style>
+        input{
+            border: 2px solid #ccc;
+            width: 100%;
+        }
+        input:focus{
+            transition: 0.35s;
+            background: #fff;
+        }
+        .btn{
+            width: 100px;
+            height: 50px;
+            border: none;
+            background: #cccccc71;
+            margin: 5px;
+        }
+        .btn:hover{
+            transition: 0.3s;
+            background: #cccccc;
+        }
+        thead, tr{
+            background: #fff;
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+        <div>
+            <label>Введите кол-во элементов: </label>
+            <input id="count" value="100" required />
+        </div>
+
+        <hr>
+
+        <div>
+            <label>Введите среднее значение: </label>
+            <input id="mean" value="0.09" required />
+        </div>
+
+        <hr>
+
+        <div>
+            <label>Введите MIN: </label>
+            <input id="min" value="0.01" required />
+        </div>
+
+        <hr>
+
+        <div>
+            <label>Введите MAX: </label>
+            <input id="max" value="0.1" required />
+        </div>
+
+        <hr>
+        
+        <div class="form-btn">
+            <input class="btn" type="submit" value="Generate" onclick="isAdd()" />
+            <input class="btn" type="submit" value="Remove" onclick="isDell()" />
+            <input class="btn" type="submit" value="Copy" onclick="isCopy()" />
+        </div>
+        <hr>
+    </header>
+
+
+    <main>
+        <div id="myTable">
+            <div id="app"></div>
+        </div>
+        <!-- <table id="myTable">
+            <thead>
+                <tr>
+                    <th colspan="1">Игорь лох</th>
+                </tr>
+            </thead>
+        </table> -->
+        <hr>
+    </main>
+
+
+    <script>
+    let count = 100
+    let mean = 0
+
+    let min = 0.01
+    let max = 1000
+
+
+    // generate a random num
+    function getRandomNumber(min, max) {
+        let randomNumber = (Math.random() * (max  - min)  + min)
+        randomNumber = Math.round(randomNumber * 100) / 100
+        if (randomNumber == 0) randomNumber = 0.01        
+
+        return randomNumber
+    }
+
+    // generate a random num - array
+    function generateRandomNumbers(count, mean) {
+        const numbers = [];
+        const deviation = Math.floor(mean / 2);
+        const min = mean - deviation;
+        const max = mean + deviation;
+        
+        for (let i = 0; i < count; i++) {
+            //numbers.push(getRandomNumber(0.01, 0.1)); // getRandomNumber(0, 1000) // getRandomNumber(this.min, this.max)
+            numbers.push(getRandomNumber(Number(this.min), Number(this.max)));
+        }
+        
+        return numbers;
+    }
+
+    // generate table of contents
+    function createTable(rowCount, colCount, numbers) {
+        //console.log('creating table of contents - starting')
+        const table = document.createElement('table');
+        
+        for (let i = 0; i < rowCount; i++) {
+            const row = document.createElement('tr');
+            
+            for (let j = 0; j < colCount; j++) {
+                const cell = document.createElement('td');
+                //cell.textContent = `Row ${i + 1}, Column ${j + 1}`;
+                cell.textContent = `${numbers[i]}`;
+                row.appendChild(cell);
+            }
+            
+            table.appendChild(row);
+        }
+        //console.log('creating table of contents - ending');
+        return table;
+    }
+
+    // fun is onClick input button - generates
+    function isAdd(){
+        this.count = document.getElementById('count').value
+        this.mean = document.getElementById('mean').value
+
+        this.min = document.getElementById('min').value
+        this.max = document.getElementById('max').value
+        //console.log(this.count + ' ' + this.mean)
+
+        let numbers =  generateRandomNumbers(this.count, this.mean);
+        //console.log(numbers);
+
+        //createTable(10, 10)
+
+        const table = createTable(this.count, 1, numbers);
+        const myDiv = document.getElementById('myTable');
+        myDiv.appendChild(table);
+    }
+
+    // fun is onClick input button - Remove
+    function isDell(){
+        const table = document.querySelector('table');
+        const myDiv = document.getElementById('myTable');
+        myDiv.removeChild(table);
+    }
+
+    function isCopy(){
+        const myDiv = document.getElementById('myTable');
+        const range = document.createRange();
+        range.selectNode(myDiv);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+    }
+
+
+    isAdd() // generates
+    </script>
+
+</body>
+</html>
